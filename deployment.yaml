@@ -1,0 +1,27 @@
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: cloud-devops-deployment
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: cloud-devops
+
+  template:
+    metadata:
+      labels:
+        app: cloud-devops
+
+    spec:
+      containers:
+        - name: cloud-devops-container
+          image: cloud-devops-app:latest
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 5000

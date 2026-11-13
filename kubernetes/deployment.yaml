@@ -6,7 +6,7 @@ metadata:
   name: cloud-devops-deployment
 
 spec:
-  replicas: 2
+  replicas: 3
 
   selector:
     matchLabels:
@@ -20,8 +20,8 @@ spec:
     spec:
       containers:
         - name: cloud-devops-container
-          image: cloud-devops-app:latest
-          imagePullPolicy: Never
+          image: ghcr.io/sivarajjj/cloud-devops-project:latest
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 5000

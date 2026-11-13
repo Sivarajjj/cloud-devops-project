@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud DevOps Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <h2>☁ CloudOps</h2>
+        <p class="menu-label">MAIN MENU</p>
+        <a class="active" href="/">Dashboard</a>
+        <a href="#services">Services</a>
+        <a href="#health">Health Monitor</a>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Cloud DevOps Dashboard</h1>
+                <p>Application infrastructure overview</p>
+            </div>
+            <span class="status-badge">
+                <span class="status-dot"></span>
+                System Online
+            </span>
+        </header>
+
+        <section class="welcome">
+            <h2>Welcome to CloudOps</h2>
+            <p>Monitor your application and container deployment.</p>
+        </section>
+
+        <section class="cards">
+            <div class="card">
+                <p>Application</p>
+                <h2>Cloud DevOps Demo</h2>
+                <span>Flask Application</span>
+            </div>
+
+            <div class="card">
+                <p>Application Status</p>
+                <h2 id="app-status">Checking...</h2>
+                <span>Live status from backend</span>
+            </div>
+
+            <div class="card">
+                <p>Deployment</p>
+                <h2>Kubernetes</h2>
+                <span>Container orchestration</span>
+            </div>
+
+            <div class="card">
+                <p>Container Registry</p>
+                <h2>GHCR</h2>
+                <span>GitHub Container Registry</span>
+            </div>
+        </section>
+
+        <section class="details" id="services">
+            <div class="panel">
+                <h3>Application Information</h3>
+                <p>Server: <strong id="server">Loading...</strong></p>
+                <p>Operating System: <strong id="os">Loading...</strong></p>
+                <p>Last Updated: <strong id="timestamp">Loading...</strong></p>
+            </div>
+
+            <div class="panel" id="health">
+                <h3>Health Monitor</h3>
+                <p id="health-status">Waiting for health check...</p>
+                <button onclick="checkHealth()">Run Health Check</button>
+            </div>
+        </section>
+
+        <footer>
+            CloudOps Dashboard | Built with Flask, Docker and Kubernetes
+        </footer>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

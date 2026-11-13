@@ -251,12 +251,14 @@ at `http://localhost:30300` using live Prometheus data. It includes request
 rate, response latency, response status codes, total requests, running pods,
 CPU, memory, and availability.
 
-![Final Grafana dashboard](docs/final-grafana-dashboard.png)
+<img width="1920" height="2048" alt="image" src="https://github.com/user-attachments/assets/d4da1231-b1b1-4c1a-96ba-e3c0657e68e1" />
+
 
 The Prometheus query below shows all three deployed application pods reporting
 `up = 1` from the live `/metrics` scrape.
 
-![Prometheus live query](docs/final-prometheus-query.png)
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d3524898-7078-4f82-a592-86c3c145cf77" />
+
 
 The architecture diagram reflects the implemented GitHub Actions, GHCR,
 Kubernetes, Flask, Prometheus, Grafana, health probe, and alerting flow. The

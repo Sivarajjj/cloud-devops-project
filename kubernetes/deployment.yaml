@@ -1,27 +1,32 @@
-
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: cloud-devops-deployment
-
 spec:
   replicas: 3
-
   selector:
     matchLabels:
       app: cloud-devops
-
   template:
     metadata:
       labels:
         app: cloud-devops
-
     spec:
       containers:
         - name: cloud-devops-container
           image: ghcr.io/sivarajjj/cloud-devops-project:latest
           imagePullPolicy: Always
-
           ports:
             - containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10

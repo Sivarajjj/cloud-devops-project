@@ -222,12 +222,22 @@ The package must be public, or the cluster must be configured with an image pull
 
 ## Final Visual Deliverables
 
-The dashboard screenshot below was captured from the deployed Grafana instance
+The application dashboard below was captured from the deployed Flask service
+at `http://localhost:30080`.
+
+![Final application dashboard](docs/final-application-dashboard.png)
+
+The Grafana dashboard below was captured from the deployed Grafana instance
 at `http://localhost:30300` using live Prometheus data. It includes request
 rate, response latency, response status codes, total requests, running pods,
 CPU, memory, and availability.
 
-![Final Cloud DevOps dashboard](docs/final-dashboard.png)
+![Final Grafana dashboard](docs/final-grafana-dashboard.png)
+
+The Prometheus query below shows all three deployed application pods reporting
+`up = 1` from the live `/metrics` scrape.
+
+![Prometheus live query](docs/final-prometheus-query.png)
 
 The architecture diagram reflects the implemented GitHub Actions, GHCR,
 Kubernetes, Flask, Prometheus, Grafana, health probe, and alerting flow. The

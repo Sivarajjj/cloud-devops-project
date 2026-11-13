@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980" role="img" aria-labelledby="title description">
+  <title id="title">Cloud DevOps project architecture</title>
+  <desc id="description">Actual project flow from developer changes through GitHub Actions, GHCR, Kubernetes, Prometheus and Grafana.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#172554"/>
+    </linearGradient>
+    <linearGradient id="deploy" x1="0" x2="1">
+      <stop offset="0" stop-color="#172554"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="observe" x1="0" x2="1">
+      <stop offset="0" stop-color="#3b1d5a"/>
+      <stop offset="1" stop-color="#581c87"/>
+    </linearGradient>
+    <marker id="arrow" markerHeight="8" markerWidth="8" orient="auto" refX="7" refY="4">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#93c5fd"/>
+    </marker>
+    <marker id="green-arrow" markerHeight="8" markerWidth="8" orient="auto" refX="7" refY="4">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#86efac"/>
+    </marker>
+    <style>
+      .title { fill: #f8fafc; font: 700 34px Arial, sans-serif; }
+      .subtitle { fill: #bfdbfe; font: 400 16px Arial, sans-serif; }
+      .box-title { fill: #f8fafc; font: 700 20px Arial, sans-serif; }
+      .box-text { fill: #dbeafe; font: 400 15px Arial, sans-serif; }
+      .small { fill: #cbd5e1; font: 400 13px Arial, sans-serif; }
+      .label { fill: #86efac; font: 700 14px Arial, sans-serif; }
+      .box { stroke: #60a5fa; stroke-width: 2; rx: 16; }
+      .obs-box { stroke: #c084fc; stroke-width: 2; rx: 16; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="980" fill="url(#background)"/>
+  <text x="800" y="62" text-anchor="middle" class="title">Cloud DevOps Project - Implemented Architecture</text>
+  <text x="800" y="92" text-anchor="middle" class="subtitle">CI/CD, container deployment, health checks, metrics collection and live dashboards</text>
+
+  <g transform="translate(40 150)">
+    <rect width="210" height="150" class="box" fill="#172554"/>
+    <text x="105" y="42" text-anchor="middle" class="box-title">Developer</text>
+    <text x="105" y="76" text-anchor="middle" class="box-text">Write code</text>
+    <text x="105" y="101" text-anchor="middle" class="box-text">Commit changes</text>
+    <text x="105" y="126" text-anchor="middle" class="small">app.py and tests</text>
+  </g>
+  <g transform="translate(300 150)">
+    <rect width="210" height="150" class="box" fill="#172554"/>
+    <text x="105" y="42" text-anchor="middle" class="box-title">GitHub</text>
+    <text x="105" y="76" text-anchor="middle" class="box-text">Source repository</text>
+    <text x="105" y="101" text-anchor="middle" class="box-text">Version control</text>
+    <text x="105" y="126" text-anchor="middle" class="small">main branch</text>
+  </g>
+  <g transform="translate(560 130)">
+    <rect width="270" height="190" class="box" fill="url(#deploy)"/>
+    <text x="135" y="40" text-anchor="middle" class="box-title">GitHub Actions</text>
+    <text x="135" y="76" text-anchor="middle" class="box-text">Checkout code</text>
+    <text x="135" y="102" text-anchor="middle" class="box-text">Pytest validation</text>
+    <text x="135" y="128" text-anchor="middle" class="box-text">Docker build</text>
+    <text x="135" y="154" text-anchor="middle" class="box-text">Publish on main</text>
+    <text x="135" y="177" text-anchor="middle" class="label">CI/CD workflow</text>
+  </g>
+  <g transform="translate(880 150)">
+    <rect width="220" height="150" class="box" fill="#172554"/>
+    <text x="110" y="42" text-anchor="middle" class="box-title">GHCR</text>
+    <text x="110" y="76" text-anchor="middle" class="box-text">Docker image</text>
+    <text x="110" y="102" text-anchor="middle" class="box-text">latest tag</text>
+    <text x="110" y="126" text-anchor="middle" class="small">ghcr.io/sivarajjj/</text>
+  </g>
+
+  <line x1="250" y1="225" x2="295" y2="225" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="510" y1="225" x2="555" y2="225" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="830" y1="225" x2="875" y2="225" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(1160 125)">
+    <rect width="390" height="240" class="box" fill="#172554"/>
+    <text x="195" y="38" text-anchor="middle" class="box-title">Kubernetes / AKS-ready</text>
+    <text x="195" y="62" text-anchor="middle" class="small">Current cluster: Docker Desktop Kubernetes</text>
+    <rect x="25" y="82" width="340" height="88" fill="#0f172a" stroke="#93c5fd" stroke-width="1" rx="12"/>
+    <text x="195" y="108" text-anchor="middle" class="box-text">Deployment: cloud-devops-deployment</text>
+    <text x="195" y="134" text-anchor="middle" class="box-text">3 Flask replicas on port 5000</text>
+    <text x="195" y="158" text-anchor="middle" class="small">GHCR imagePullPolicy: Always</text>
+    <text x="195" y="202" text-anchor="middle" class="label">NodePort: 30080</text>
+    <text x="195" y="226" text-anchor="middle" class="small">Service label: app=cloud-devops</text>
+  </g>
+  <line x1="1100" y1="225" x2="1155" y2="225" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g transform="translate(1160 420)">
+    <rect width="390" height="190" class="box" fill="#0f3b35"/>
+    <text x="195" y="38" text-anchor="middle" class="box-title">Flask Cloud Application</text>
+    <text x="195" y="75" text-anchor="middle" class="box-text">/api/status - runtime status</text>
+    <text x="195" y="101" text-anchor="middle" class="box-text">/health - liveness and readiness</text>
+    <text x="195" y="127" text-anchor="middle" class="box-text">/metrics - Prometheus metrics</text>
+    <text x="195" y="163" text-anchor="middle" class="label">HTTP counters and latency histograms</text>
+  </g>
+  <line x1="1355" y1="365" x2="1355" y2="415" stroke="#93c5fd" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="1380" y="395" class="small">deploy</text>
+
+  <g transform="translate(700 420)">
+    <rect width="350" height="190" class="obs-box" fill="url(#observe)"/>
+    <text x="175" y="40" text-anchor="middle" class="box-title">Prometheus</text>
+    <text x="175" y="76" text-anchor="middle" class="box-text">ServiceMonitor discovery</text>
+    <text x="175" y="102" text-anchor="middle" class="box-text">Scrapes /metrics every 15s</text>
+    <text x="175" y="128" text-anchor="middle" class="box-text">Kubernetes and cAdvisor metrics</text>
+    <text x="175" y="164" text-anchor="middle" class="label">PrometheusRule -> Alertmanager</text>
+  </g>
+  <line x1="1160" y1="515" x2="1055" y2="515" stroke="#86efac" stroke-width="3" marker-end="url(#green-arrow)"/>
+  <text x="1080" y="495" class="small">scrape /metrics</text>
+
+  <g transform="translate(260 700)">
+    <rect width="460" height="150" class="obs-box" fill="#3b1d5a"/>
+    <text x="230" y="40" text-anchor="middle" class="box-title">Grafana Dashboard</text>
+    <text x="230" y="75" text-anchor="middle" class="box-text">Prometheus data source</text>
+    <text x="230" y="102" text-anchor="middle" class="box-text">Request rate, latency, status codes</text>
+    <text x="230" y="126" text-anchor="middle" class="box-text">Running pods, CPU, memory, availability</text>
+  </g>
+  <line x1="875" y1="610" x2="610" y2="695" stroke="#86efac" stroke-width="3" marker-end="url(#green-arrow)"/>
+  <text x="700" y="640" class="small">Prometheus data source</text>
+
+  <g transform="translate(850 700)">
+    <rect width="480" height="150" fill="#172554" stroke="#fbbf24" stroke-width="2" rx="16"/>
+    <text x="240" y="40" text-anchor="middle" class="box-title">Health and Alerting</text>
+    <text x="240" y="75" text-anchor="middle" class="box-text">Liveness/readiness probes protect traffic</text>
+    <text x="240" y="102" text-anchor="middle" class="box-text">App down, error rate and latency alerts</text>
+    <text x="240" y="126" text-anchor="middle" class="small">Alertmanager is provided by kube-prometheus-stack</text>
+  </g>
+  <line x1="875" y1="610" x2="1070" y2="695" stroke="#fbbf24" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="950" y="650" class="small">alert rules</text>
+
+  <path d="M1355 610 C1355 650 1350 670 1330 700" fill="none" stroke="#86efac" stroke-width="2" stroke-dasharray="8 6" marker-end="url(#green-arrow)"/>
+  <text x="1375" y="660" class="small">health checks</text>
+
+  <rect x="40" y="900" width="1510" height="42" fill="#0f172a" stroke="#334155" rx="10"/>
+  <text x="795" y="927" text-anchor="middle" class="subtitle">Implemented repository resources: Dockerfile | GitHub Actions | kubernetes/deployment.yaml | kubernetes/service.yaml | kubernetes/monitoring.yaml</text>
+</svg>

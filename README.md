@@ -19,7 +19,7 @@ Developer -> GitHub -> GitHub Actions -> Tests -> Docker -> GHCR -> Kubernetes -
 - Liveness and readiness probes
 - GitHub Actions test, build, and GHCR publishing workflow
 - Prometheus application metrics and alert rules
-- Grafana dashboard provisioned from Kubernetes manifests
+- Grafana dashboard provisioned from Kubernetes manifests with application and pod resource panels
 
 ## Technology Stack
 
@@ -220,7 +220,21 @@ The package must be public, or the cluster must be configured with an image pull
 
 ## Screenshots
 
-<img width="1917" height="917" alt="image" src="https://github.com/user-attachments/assets/868af141-8ad0-4bef-82cf-df926ab016d2" />
+## Final Visual Deliverables
+
+The dashboard screenshot below was captured from the deployed Grafana instance
+at `http://localhost:30300` using live Prometheus data. It includes request
+rate, response latency, response status codes, total requests, running pods,
+CPU, memory, and availability.
+
+![Final Cloud DevOps dashboard](docs/final-dashboard.png)
+
+The architecture diagram reflects the implemented GitHub Actions, GHCR,
+Kubernetes, Flask, Prometheus, Grafana, health probe, and alerting flow. The
+current deployment is Docker Desktop Kubernetes; the manifests are AKS-ready
+after installing kube-prometheus-stack in the AKS cluster.
+
+![Complete Cloud DevOps architecture](docs/cloud-devops-architecture.svg)
 
 
 ## Future Improvements

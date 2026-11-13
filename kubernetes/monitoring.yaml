@@ -74,7 +74,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "fieldConfig": {
             "defaults": {
@@ -101,7 +101,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "fieldConfig": {
             "defaults": {
@@ -128,11 +128,11 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "prometheus"
           },
           "fieldConfig": {
             "defaults": {
-              "unit": "percent"
+              "unit": "reqps"
             },
             "overrides": []
           },
@@ -143,11 +143,146 @@ data:
             "y": 8
           },
           "id": 3,
-          "title": "5xx error rate",
+          "title": "HTTP response status codes",
           "type": "timeseries",
           "targets": [
             {
-              "expr": "100 * sum(rate(http_requests_total{service=\"cloud-devops-service\",status=~\"5..\"}[5m])) / sum(rate(http_requests_total{service=\"cloud-devops-service\"}[5m]))",
+              "expr": "sum by (status) (rate(http_requests_total{service=\"cloud-devops-service\"}[5m]))",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "id": 4,
+          "title": "Total requests (5m)",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "sum(increase(http_requests_total{service=\"cloud-devops-service\"}[5m]))",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 16
+          },
+          "id": 5,
+          "title": "Running application pods",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "sum(kube_pod_status_phase{namespace=\"default\",pod=~\"cloud-devops-deployment-.*\",phase=\"Running\"})",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 16
+          },
+          "id": 6,
+          "title": "Pod CPU usage",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"default\",pod=~\"cloud-devops-deployment-.*\"}[5m]))",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 24
+          },
+          "id": 7,
+          "title": "Pod memory usage",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"default\",pod=~\"cloud-devops-deployment-.*\"})",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 24
+          },
+          "id": 8,
+          "title": "Application availability",
+          "type": "stat",
+          "targets": [
+            {
+              "expr": "100 * avg(up{service=\"cloud-devops-service\"})",
               "refId": "A"
             }
           ]

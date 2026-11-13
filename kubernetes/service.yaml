@@ -4,6 +4,8 @@ kind: Service
 
 metadata:
   name: cloud-devops-service
+  labels:
+    app: cloud-devops
 
 spec:
   type: NodePort

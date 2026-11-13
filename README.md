@@ -171,7 +171,8 @@ The package must be public, or the cluster must be configured with an image pull
 
 ## Screenshots
 
-Add screenshots of the local dashboard and the Kubernetes dashboard at `http://localhost:30080` here when capturing project evidence.
+<img width="1917" height="917" alt="image" src="https://github.com/user-attachments/assets/868af141-8ad0-4bef-82cf-df926ab016d2" />
+
 
 ## Future Improvements
 

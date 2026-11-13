@@ -20,3 +20,12 @@ def test_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json["status"] == "Healthy"
+
+
+def test_metrics():
+    client = app.test_client()
+    client.get("/health")
+    response = client.get("/metrics")
+    assert response.status_code == 200
+    assert b"http_requests_total" in response.data
+    assert b"http_request_duration_seconds" in response.data

@@ -1,0 +1,160 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: cloud-devops
+  labels:
+    release: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: cloud-devops
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cloud-devops
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: cloud-devops-alerts
+      rules:
+        - alert: CloudDevOpsAppDown
+          expr: up{service="cloud-devops-service"} == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Cloud DevOps application is down
+            description: Prometheus cannot scrape the application metrics endpoint.
+        - alert: CloudDevOpsHighErrorRate
+          expr: |
+            sum(rate(http_requests_total{service="cloud-devops-service",status=~"5.."}[5m]))
+            /
+            sum(rate(http_requests_total{service="cloud-devops-service"}[5m])) > 0.05
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Cloud DevOps application has a high error rate
+            description: More than 5% of requests returned server errors over the last 5 minutes.
+        - alert: CloudDevOpsHighLatency
+          expr: |
+            histogram_quantile(
+              0.95,
+              sum(rate(http_request_duration_seconds_bucket{service="cloud-devops-service"}[5m])) by (le)
+            ) > 1
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Cloud DevOps application latency is high
+            description: The 95th percentile request latency is above 1 second.
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloud-devops-dashboard
+  namespace: monitoring
+  labels:
+    grafana_dashboard: "1"
+data:
+  cloud-devops.json: |
+    {
+      "annotations": {
+        "list": []
+      },
+      "editable": true,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "id": 1,
+          "title": "Requests per second",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "sum(rate(http_requests_total{service=\"cloud-devops-service\"}[5m]))",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "id": 2,
+          "title": "95th percentile latency",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket{service=\"cloud-devops-service\"}[5m])) by (le))",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "id": 3,
+          "title": "5xx error rate",
+          "type": "timeseries",
+          "targets": [
+            {
+              "expr": "100 * sum(rate(http_requests_total{service=\"cloud-devops-service\",status=~\"5..\"}[5m])) / sum(rate(http_requests_total{service=\"cloud-devops-service\"}[5m]))",
+              "refId": "A"
+            }
+          ]
+        }
+      ],
+      "schemaVersion": 39,
+      "title": "Cloud DevOps Application",
+      "uid": "cloud-devops",
+      "version": 1
+    }

@@ -16,6 +16,8 @@ Developer -> GitHub -> GitHub Actions -> Tests -> Docker -> GHCR -> Kubernetes -
 - Kubernetes Deployment with three replicas
 - Liveness and readiness probes
 - GitHub Actions test, build, and GHCR publishing workflow
+- Prometheus application metrics and alert rules
+- Grafana dashboard provisioned from Kubernetes manifests
 
 ## Technology Stack
 
@@ -99,6 +101,42 @@ Useful endpoint checks:
 ```bash
 curl http://localhost:30080/health
 curl http://localhost:30080/api/status
+```
+
+## Monitoring with Prometheus and Grafana
+
+Deploy the application and monitoring stack:
+
+```bash
+kubectl apply -f kubernetes/deployment.yaml
+kubectl apply -f kubernetes/service.yaml
+kubectl apply -f kubernetes/monitoring.yaml
+```
+
+The application exposes Prometheus metrics at `/metrics`. The existing
+kube-prometheus-stack scrapes the application Service every 15 seconds through
+the ServiceMonitor and evaluates alerts for application outages, high 5xx
+error rates, and high request latency.
+
+Open the monitoring tools locally:
+
+```text
+Prometheus: http://localhost:30900
+Grafana:    http://localhost:30300
+```
+
+The monitoring manifest provisions a `Cloud DevOps Application` dashboard in
+the existing Grafana instance. The Grafana credentials are managed by the
+Helm release's Kubernetes Secret.
+
+Check monitoring resources with:
+
+```bash
+kubectl get pods -n monitoring
+kubectl get servicemonitor cloud-devops
+kubectl get prometheusrule -n monitoring cloud-devops
+kubectl port-forward -n monitoring service/monitoring-kube-prometheus-prometheus 9090:9090
+kubectl port-forward -n monitoring service/monitoring-grafana 3000:80
 ```
 
 The Deployment uses the public image:

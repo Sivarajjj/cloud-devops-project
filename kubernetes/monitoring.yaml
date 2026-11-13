@@ -25,13 +25,15 @@ spec:
     - name: cloud-devops-alerts
       rules:
         - alert: CloudDevOpsAppDown
-          expr: up{service="cloud-devops-service"} == 0
+          expr: |
+            absent(up{service="cloud-devops-service"})
+            or sum(up{service="cloud-devops-service"}) < 3
           for: 2m
           labels:
             severity: critical
           annotations:
             summary: Cloud DevOps application is down
-            description: Prometheus cannot scrape the application metrics endpoint.
+            description: Fewer than three application replicas are currently being scraped.
         - alert: CloudDevOpsHighErrorRate
           expr: |
             sum(rate(http_requests_total{service="cloud-devops-service",status=~"5.."}[5m]))
@@ -283,6 +285,33 @@ data:
           "targets": [
             {
               "expr": "100 * avg(up{service=\"cloud-devops-service\"})",
+              "refId": "A"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 32
+          },
+          "id": 9,
+          "title": "Running container image",
+          "type": "table",
+          "targets": [
+            {
+              "expr": "kube_pod_container_info{namespace=\"default\",pod=~\"cloud-devops-deployment-.*\",container=\"cloud-devops-container\"}",
+              "format": "table",
+              "instant": true,
               "refId": "A"
             }
           ]

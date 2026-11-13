@@ -4,6 +4,8 @@ A Flask-based dashboard demonstrating an end-to-end Cloud DevOps workflow:
 
 ```text
 Developer -> GitHub -> GitHub Actions -> Tests -> Docker -> GHCR -> Kubernetes -> NodePort
+                                                                    |
+                                                                    +-> Prometheus -> Grafana -> Alerts
 ```
 
 ## Features
@@ -59,7 +61,8 @@ pip install -r requirements-dev.txt
 python -m pytest -v
 ```
 
-The tests cover the dashboard page, status endpoint, and health endpoint.
+The tests cover the dashboard page, status endpoint, health endpoint, and
+Prometheus metrics endpoint.
 
 ## Docker
 
@@ -129,6 +132,10 @@ The monitoring manifest provisions a `Cloud DevOps Application` dashboard in
 the existing Grafana instance. The Grafana credentials are managed by the
 Helm release's Kubernetes Secret.
 
+The monitoring stack is currently running on Docker Desktop Kubernetes. The
+same Kubernetes resources can be applied to AKS after installing the
+kube-prometheus-stack and configuring the cluster's external access.
+
 Check monitoring resources with:
 
 ```bash
@@ -173,7 +180,11 @@ The workflow uses the built-in `GITHUB_TOKEN` with package write permission.
 
 ## Monitoring Notes
 
-Pod readiness, restart counts, probe configuration, Service endpoints, and application logs can be inspected with `kubectl`. CPU and memory metrics require the Kubernetes Metrics API; if `kubectl top pods` reports `Metrics API not available`, live resource usage is not currently enabled in the cluster.
+Pod readiness, restart counts, probe configuration, Service endpoints,
+application metrics, and application logs can be inspected with `kubectl`.
+CPU and memory metrics require the Kubernetes Metrics API; if `kubectl top
+pods` reports `Metrics API not available`, live resource usage is not
+currently enabled in the cluster.
 
 ## Troubleshooting
 
@@ -215,7 +226,6 @@ The package must be public, or the cluster must be configured with an image pull
 ## Future Improvements
 
 - Add resource requests and limits after enabling cluster metrics.
-- Add centralized logging and alerting.
 - Add deployment versioning and rollback automation.
 - Add HTTPS through an Ingress controller.
-- Evaluate Azure Container Registry and AKS after reviewing cost and student subscription limits.
+- Add persistent storage for Prometheus and Grafana data.

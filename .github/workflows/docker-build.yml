@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
@@ -27,3 +31,20 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t cloud-devops-app:latest .
+
+      - name: Set GHCR image name
+        run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: printf '%s' "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Tag Docker image for GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: docker tag cloud-devops-app:latest "$IMAGE_NAME:latest"
+
+      - name: Publish Docker image to GHCR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: docker push "$IMAGE_NAME:latest"

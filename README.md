@@ -186,6 +186,25 @@ CPU and memory metrics require the Kubernetes Metrics API; if `kubectl top
 pods` reports `Metrics API not available`, live resource usage is not
 currently enabled in the cluster.
 
+### Alert Testing and Recovery
+
+The application outage alert was tested by temporarily scaling the Deployment
+to zero replicas:
+
+```bash
+kubectl scale deployment/cloud-devops-deployment --replicas=0
+kubectl scale deployment/cloud-devops-deployment --replicas=3
+```
+
+`CloudDevOpsAppDown` entered `firing` after the configured two-minute
+threshold. After the replicas were restored, the alert cleared and all three
+pods returned to `Running`. The alert also covers missing scrape series and
+partial replica loss.
+
+Docker Desktop may expose separate kube-system control-plane alerts when
+control-plane metrics are unavailable; those alerts are independent of the
+Cloud DevOps application alert.
+
 ## Troubleshooting
 
 ### Pods are not ready
